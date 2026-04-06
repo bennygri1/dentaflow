@@ -1,255 +1,31 @@
-<!-- DentaFlow Chat Widget -->
-<!-- Paste this snippet before </body> on your clinic website -->
-<!-- Replace DENTAFLOW_API_URL with your deployed domain -->
+<!-- DentaFlow Chat Widget v2 -->
+<!-- Paste this single snippet before </body> on your clinic website -->
 
-<style>
-  #df-widget-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 9999;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 999px;
-    padding: 14px 22px;
-    font-size: 14px;
-    font-family: system-ui, sans-serif;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(37,99,235,0.35);
-    transition: background 0.15s, transform 0.15s;
-  }
-  #df-widget-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
-
-  #df-panel {
-    display: none;
-    position: fixed;
-    bottom: 84px;
-    right: 24px;
-    z-index: 9999;
-    width: 320px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.15);
-    font-family: system-ui, sans-serif;
-    overflow: hidden;
-  }
-  #df-panel.df-open { display: flex; flex-direction: column; }
-
-  #df-header {
-    background: #2563eb;
-    color: #fff;
-    padding: 16px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  #df-header span { font-size: 12px; font-weight: 400; opacity: 0.8; margin-top: 2px; display: block; }
-  #df-close {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    line-height: 1;
-    opacity: 0.7;
-    padding: 0;
-  }
-  #df-close:hover { opacity: 1; }
-
-  #df-body { padding: 18px; }
-
-  .df-label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 5px;
-  }
-  .df-input, .df-select {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: system-ui, sans-serif;
-    color: #111;
-    background: #f9fafb;
-    box-sizing: border-box;
-    margin-bottom: 12px;
-    transition: border-color 0.15s;
-    appearance: none;
-  }
-  .df-input:focus, .df-select:focus {
-    outline: none;
-    border-color: #2563eb;
-    background: #fff;
-  }
-
-  #df-submit {
-    width: 100%;
-    padding: 11px;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: system-ui, sans-serif;
-    cursor: pointer;
-    transition: background 0.15s;
-    margin-top: 2px;
-  }
-  #df-submit:hover { background: #1d4ed8; }
-  #df-submit:disabled { background: #93c5fd; cursor: not-allowed; }
-
-  #df-error {
-    display: none;
-    font-size: 12px;
-    color: #ef4444;
-    margin-bottom: 10px;
-  }
-  #df-success {
-    display: none;
-    text-align: center;
-    padding: 24px 16px;
-  }
-  #df-success p:first-child {
-    font-size: 28px;
-    margin: 0 0 8px;
-  }
-  #df-success p:last-child {
-    font-size: 13px;
-    color: #6b7280;
-    margin: 0;
-  }
-</style>
-
-<button id="df-widget-btn">💬 Chat with us</button>
-
-<div id="df-panel">
-  <div id="df-header">
-    <div>
-      Book an appointment
-      <span>We'll get back to you shortly</span>
-    </div>
-    <button id="df-close">&#x2715;</button>
-  </div>
-  <div id="df-body">
-    <div id="df-form">
-      <label class="df-label" for="df-name">Your name</label>
-      <input id="df-name" class="df-input" type="text" placeholder="Jane Smith" autocomplete="name" />
-
-      <label class="df-label" for="df-service">I'm interested in</label>
-      <select id="df-service" class="df-select">
-        <option value="">Select a service…</option>
-        <option>General check-up</option>
-        <option>Teeth whitening</option>
-        <option>Invisalign</option>
-        <option>Dental implants</option>
-        <option>Emergency appointment</option>
-        <option>Other</option>
-      </select>
-
-      <label class="df-label" for="df-phone">Phone number</label>
-      <input id="df-phone" class="df-input" type="tel" placeholder="+44 7700 900000" autocomplete="tel" />
-
-      <div id="df-error"></div>
-      <button id="df-submit">Send enquiry</button>
-    </div>
-
-    <div id="df-success">
-      <p>🎉</p>
-      <p>Thanks! We'll be in touch shortly.</p>
-    </div>
-  </div>
-</div>
-
-<script>
-  (function () {
-    var API_URL  = 'https://your-domain.com/api/leads';
-    var CLINIC_ID = '84a3d357-1ea8-4b11-ae89-0e6088a358b6';
-
-    var btn    = document.getElementById('df-widget-btn');
-    var panel  = document.getElementById('df-panel');
-    var close  = document.getElementById('df-close');
-    var submit = document.getElementById('df-submit');
-    var error  = document.getElementById('df-error');
-    var form   = document.getElementById('df-form');
-    var success = document.getElementById('df-success');
-
-    btn.addEventListener('click', function () {
-      panel.classList.toggle('df-open');
-    });
-
-    close.addEventListener('click', function () {
-      panel.classList.remove('df-open');
-    });
-
-    submit.addEventListener('click', async function () {
-      var name    = document.getElementById('df-name').value.trim();
-      var service = document.getElementById('df-service').value.trim();
-      var phone   = document.getElementById('df-phone').value.trim();
-
-      error.style.display = 'none';
-      error.textContent = '';
-
-      if (!name) {
-        error.textContent = 'Please enter your name.';
-        error.style.display = 'block';
-        return;
-      }
-
-      submit.disabled = true;
-      submit.textContent = 'Sending…';
-
-      try {
-        var res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            clinic_id: CLINIC_ID,
-            name: name,
-            service: service || null,
-            phone: phone || null,
-            status: 'new'
-          })
-        });
-
-        var json = await res.json();
-
-        if (!res.ok) {
-          throw new Error(json.error || 'Something went wrong.');
-        }
-
-        form.style.display = 'none';
-        success.style.display = 'block';
-
-        setTimeout(function () {
-          panel.classList.remove('df-open');
-          setTimeout(function () {
-            form.style.display = 'block';
-            success.style.display = 'none';
-            document.getElementById('df-name').value = '';
-            document.getElementById('df-service').value = '';
-            document.getElementById('df-phone').value = '';
-            submit.disabled = false;
-            submit.textContent = 'Send enquiry';
-          }, 300);
-        }, 2500);
-
-      } catch (e) {
-        error.textContent = e.message || 'Failed to send. Please try again.';
-        error.style.display = 'block';
-        submit.disabled = false;
-        submit.textContent = 'Send enquiry';
-      }
-    });
-  })();
+<script
+  src="https://your-domain.com/widget.js"
+  data-clinic-id="YOUR-CLINIC-UUID"
+  data-api-url="https://your-domain.com"
+  data-clinic-name="Smile Studio"
+  data-color="#2563eb">
 </script>
-<!-- End DentaFlow Chat Widget -->
+
+<!--
+  Attributes
+  ──────────
+  data-clinic-id    (required)  UUID from your DentaFlow profile
+  data-api-url      (required)  Base URL of your deployed DentaFlow app — no trailing slash
+  data-clinic-name  (optional)  Shown in the chat header and used in the AI's greeting
+  data-color        (optional)  Hex primary colour, default #2563eb
+
+  How it works
+  ────────────
+  The widget opens an AI chat panel (powered by Claude).
+  When the patient provides their name and a contact method, the AI
+  saves the lead automatically — no form, no submit button.
+
+  Events (window.addEventListener)
+  ─────────────────────────────────
+  df:open     — panel opened
+  df:message  — user sent a message  (detail: { text })
+  df:lead     — lead saved to Supabase (detail: { id })
+-->

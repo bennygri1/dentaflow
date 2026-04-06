@@ -15,6 +15,7 @@ interface LeadPayload {
   name: string
   service?: string
   phone?: string
+  email?: string
 }
 
 export async function sendLeadToDentaFlow(payload: LeadPayload): Promise<void> {

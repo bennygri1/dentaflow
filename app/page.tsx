@@ -37,7 +37,6 @@ interface ClientDetail {
   email: string
   leads: number
   appts: number
-  clinicId: string
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -60,12 +59,12 @@ const globalStyles = `
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
   .sidebar-item { transition: all 0.15s ease; }
-  .sidebar-item:hover { background: rgba(255,255,255,0.05); }
-  .sidebar-item-active { background: rgba(59,130,246,0.15) !important; color: #60a5fa !important; }
+  .sidebar-item:hover { background: rgba(59,130,246,0.06); }
+  .sidebar-item-active { background: rgba(59,130,246,0.1) !important; color: #2563eb !important; }
   .client-row:hover { background: #f8fafc; }
   input:focus, textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
-  .metric-card { transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: inset 0 1px 0 rgba(255,255,255,0.07); }
-  .metric-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.11); }
+  .metric-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .metric-card:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
   .btn-primary-hover:hover { background: #1d4ed8 !important; transform: translateY(-0.5px); }
   .btn-primary-hover:active { transform: translateY(0); }
   .message-bubble { animation: slideUp 0.2s ease-out; }
@@ -224,7 +223,7 @@ function LoginPage({
             <span className="font-semibold text-base">DentaFlow</span>
           </div>
           <div className="mb-8">
-            <h1 className="text-2xl font-semibold text-gray-900 mb-1.5">Welcome back</h1>
+            <h1 className="text-2xl font-semibold text-white mb-1.5">Welcome back</h1>
             <p className="text-gray-500 text-sm">Sign in to your practice portal</p>
           </div>
           <div className="space-y-4">
@@ -235,7 +234,7 @@ function LoginPage({
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && doLogin()}
-                className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-400"
+                className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-white text-white placeholder-gray-400"
               />
             </div>
             <div>
@@ -248,7 +247,7 @@ function LoginPage({
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && doLogin()}
-                className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-400"
+                className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-white text-white placeholder-gray-400"
               />
             </div>
             {error && <p className="text-xs text-red-500">{error}</p>}
@@ -324,7 +323,7 @@ function SignupPage({ onGoLogin }: { onGoLogin: () => void }) {
           <span className="font-semibold text-base">DentaFlow</span>
         </div>
 
-        <h1 className="text-2xl font-semibold text-gray-900 mb-2">
+        <h1 className="text-2xl font-semibold text-white mb-2">
           Invitation only
         </h1>
         <p className="text-sm text-gray-500 mb-6">
@@ -350,7 +349,6 @@ function OwnerDashboard({
   onLogout,
   leads,
   metrics,
-  onRefreshLeads,
 }: {
   account: Account
   email: string
@@ -362,10 +360,9 @@ function OwnerDashboard({
   booked: number
   conversion: number
   }
-  onRefreshLeads: (clinicId: string) => Promise<void>
 }) {
   const [activeTab, setActiveTab] = useState<OwnerTab>('overview')
-  const [selectedConv, setSelectedConv] = useState<{ name: string; topic: string; av: string } | null>(null)
+  const [selectedConv, setSelectedConv] = useState({ name: 'Sarah Mitchell', topic: 'Teeth whitening enquiry', av: 'SM' })
 
   const ownerTabs: { id: OwnerTab; label: string; icon: React.ReactNode; badge?: string; dot?: boolean }[] = [
     { id: 'overview', label: 'Overview', icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> },
@@ -383,14 +380,14 @@ function OwnerDashboard({
     <div className="min-h-screen bg-[#111111] text-white flex" style={{ height: '100vh' }}>
       {/* Sidebar */}
       <aside className="w-56 bg-[#151515] border-r border-white/10 flex flex-col flex-shrink-0">
-        <div className="p-4 border-b border-white/10">
+        <div className="p-4 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
               <ToothIcon className="w-3.5 h-3.5 text-white" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-semibold text-white truncate">{clinicShort}</div>
-              <div className="text-xs text-gray-500">Practice portal</div>
+              <div className="text-xs font-semibold text-gray-900 truncate">{clinicShort}</div>
+              <div className="text-xs text-gray-400">Practice portal</div>
             </div>
           </div>
         </div>
@@ -399,19 +396,19 @@ function OwnerDashboard({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`sidebar-item w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left text-xs font-medium ${activeTab === tab.id ? 'sidebar-item-active' : 'text-gray-400'}`}
+              className={`sidebar-item w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left text-xs font-medium ${activeTab === tab.id ? 'sidebar-item-active' : 'text-gray-500'}`}
             >
               {tab.icon}
               {tab.label}
-              {tab.badge && <span className="ml-auto bg-blue-900 text-blue-300 text-xs px-1.5 py-0.5 rounded-full font-medium">{tab.badge}</span>}
+              {tab.badge && <span className="ml-auto bg-blue-100 text-blue-600 text-xs px-1.5 py-0.5 rounded-full font-medium">{tab.badge}</span>}
             </button>
           ))}
-          <div className="my-2 h-px bg-white/10" />
+          <div className="my-2 h-px bg-gray-100" />
           {ownerTabs.slice(5).map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`sidebar-item w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left text-xs font-medium ${activeTab === tab.id ? 'sidebar-item-active' : 'text-gray-400'}`}
+              className={`sidebar-item w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left text-xs font-medium ${activeTab === tab.id ? 'sidebar-item-active' : 'text-gray-500'}`}
             >
               {tab.icon}
               {tab.label}
@@ -419,14 +416,14 @@ function OwnerDashboard({
             </button>
           ))}
         </nav>
-        <div className="p-3 border-t border-white/10">
-          <div className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-white/5 cursor-pointer">
-            <div className="w-7 h-7 rounded-full bg-blue-900 flex items-center justify-center text-blue-300 text-xs font-semibold flex-shrink-0">{account.av}</div>
+        <div className="p-3 border-t border-gray-100">
+          <div className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-xs font-semibold flex-shrink-0">{account.av}</div>
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-medium text-white truncate">{account.doctor}</div>
-              <div className="text-xs text-gray-500 truncate">{email}</div>
+              <div className="text-xs font-medium text-gray-800 truncate">{account.doctor}</div>
+              <div className="text-xs text-gray-400 truncate">{email}</div>
             </div>
-            <button onClick={onLogout} className="text-gray-500 hover:text-gray-300"><LogoutIcon /></button>
+            <button onClick={onLogout} className="text-gray-400 hover:text-gray-600"><LogoutIcon /></button>
           </div>
         </div>
       </aside>
@@ -435,11 +432,10 @@ function OwnerDashboard({
       <main className="flex-1 overflow-y-auto bg-[#111111]">
         {activeTab === 'overview' && <OwnerOverview account={account} leads={leads} metrics={metrics} onViewLeads={() => setActiveTab('leads')} onViewBookings={() => setActiveTab('bookings')} onViewChatbot={() => setActiveTab('chatbot')} />}
         {activeTab === 'conversations' && <OwnerConversations selected={selectedConv} onSelect={setSelectedConv} />}
-
-        {activeTab === 'leads' && <OwnerLeads leads={leads} clinicId={account.id ?? ''} onLeadAdded={() => onRefreshLeads(account.id ?? '')} />}
+        {activeTab === 'leads' && <OwnerLeads leads={leads} />}
         {activeTab === 'bookings' && <PlaceholderTab label="Bookings view" />}
         {activeTab === 'analytics' && <PlaceholderTab label="Analytics view" />}
-        {activeTab === 'chatbot' && <ChatbotIntegration clinicId={account.id ?? ''} />}
+        {activeTab === 'chatbot' && <ChatbotIntegration account={account} />}
         {activeTab === 'settings' && <PlaceholderTab label="Settings" />}
       </main>
     </div>
@@ -501,38 +497,47 @@ function OwnerOverview({ account, leads, metrics, onViewLeads, onViewBookings, o
 ]
   
   return (
-    <div className="p-8 animate-fade-in">
-      <div className="mb-8">
-        <h1 className="text-xl font-bold text-white tracking-tight">Good morning, {account.doctor}</h1>
-        <p className="text-xs text-gray-600 mt-1">Here&apos;s what&apos;s happening at {account.clinic} today</p>
+    <div className="p-6 animate-fade-in">
+      <div className="mb-6">
+        <h1 className="text-lg font-semibold text-gray-900">Good morning, {account.doctor}</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Here&apos;s what&apos;s happening at {account.clinic} today</p>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {metricCards.map((m) => (
-          <div key={m.label} className="metric-card bg-gradient-to-b from-[#212121] to-[#191919] border border-white/[0.08] rounded-2xl p-5">
-            <div className="mb-4">
-              <span className="text-[11px] font-medium text-gray-600 uppercase tracking-widest">{m.label}</span>
+          <div key={m.label} className="metric-card bg-[#181818] border border-white/10 rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">{m.label}</span>
+              <div className={`w-7 h-7 ${m.iconBg} rounded-lg flex items-center justify-center`}>
+                <span className={m.iconColor}>{m.icon}</span>
+              </div>
             </div>
-            <div className="text-3xl font-bold text-white mb-1 tracking-tight">{m.value}</div>
+            <div className="text-2xl font-semibold text-gray-900 mb-1">{m.value}</div>
+            <div className={`text-xs font-medium flex items-center gap-1 ${m.up ? 'text-emerald-600' : 'text-red-500'}`}>
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                {m.up ? <polyline points="18 15 12 9 6 15"/> : <polyline points="18 9 12 15 6 9"/>}
+              </svg>
+              {m.delta}
+            </div>
           </div>
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 bg-[#1a1a1a] border border-white/[0.08] rounded-2xl p-5">
+        <div className="lg:col-span-2 bg-[#181818] border border-white/10 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Recent leads</h3>
-            <button onClick={onViewLeads} className="text-xs text-gray-500 hover:text-gray-300 font-medium transition-colors">View all</button>
+            <h3 className="text-sm font-semibold text-gray-900">Recent leads</h3>
+            <button onClick={onViewLeads} className="text-xs text-blue-600 hover:text-blue-700 font-medium">View all</button>
           </div>
-          <div className="space-y-1">
+          <div className="space-y-4">
   {leads.length === 0 ? (
-    <div className="text-sm text-gray-500 py-4 text-center">No leads yet</div>
+    <div className="text-sm text-gray-500">No leads yet</div>
   ) : (
   leads.slice(0, 4).map((lead) => (
-    <div key={lead.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.04] transition-colors">
+    <div key={lead.id} className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50">
       <div className="flex-1 min-w-0">
-        <div className="text-sm font-medium text-gray-200">{lead.name}</div>
-        <div className="text-xs text-gray-600 mt-0.5">{lead.service || 'General enquiry'}</div>
+        <div className="text-sm font-medium text-gray-900">{lead.name}</div>
+        <div className="text-xs text-gray-500">{lead.service || 'General enquiry'}</div>
       </div>
-      <span className="text-xs px-2.5 py-1 rounded-full bg-white/[0.07] text-gray-400 capitalize font-medium">
+      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 capitalize">
         {lead.status || 'new'}
       </span>
     </div>
@@ -548,81 +553,92 @@ function OwnerOverview({ account, leads, metrics, onViewLeads, onViewBookings, o
 // ─── Owner: Conversations ─────────────────────────────────────────────────────
 
 function OwnerConversations({ selected, onSelect }: {
-  selected: { name: string; topic: string; av: string } | null
-  onSelect: (c: { name: string; topic: string; av: string } | null) => void
+  selected: { name: string; topic: string; av: string }
+  onSelect: (c: { name: string; topic: string; av: string }) => void
 }) {
+  const convList = [
+    { av: 'SM', avClass: 'bg-blue-100 text-blue-700', name: 'Sarah Mitchell', preview: "Hi, I'd like to know about teeth whitening...", tag: 'whitening', tagClass: 'bg-blue-100 text-blue-700', time: '14:32', topic: 'Teeth whitening enquiry' },
+    { av: 'TG', avClass: 'bg-emerald-100 text-emerald-700', name: 'Tom Griffiths', preview: "Need to book a checkup, it's been 18 months...", tag: 'checkup', tagClass: 'bg-emerald-100 text-emerald-700', time: '11:15', topic: 'Checkup booking' },
+    { av: '?', avClass: 'bg-gray-100 text-gray-500', name: 'Unknown visitor', preview: 'Do you accept NHS patients?', tag: 'nhs', tagClass: 'bg-gray-100 text-gray-600', time: '09:48', topic: 'NHS enquiry' },
+    { av: 'AC', avClass: 'bg-red-100 text-red-700', name: 'Amelia Chen', preview: 'I think I have a cracked filling...', tag: 'urgent', tagClass: 'bg-red-100 text-red-700', time: 'Yesterday', topic: 'Emergency filling' },
+    { av: 'MW', avClass: 'bg-purple-100 text-purple-700', name: 'Marcus Webb', preview: 'How much does Invisalign cost?', tag: 'invisalign', tagClass: 'bg-purple-100 text-purple-700', time: 'Yesterday', topic: 'Invisalign' },
+  ]
+  const messages = [
+    { isBot: true, text: "Hi! Welcome to Bright Smile Dental. I'm your virtual dental assistant. How can I help you today?", time: '14:28' },
+    { isBot: false, text: "Hi, I'd like to know about teeth whitening please", time: '14:29' },
+    { isBot: true, text: "We offer professional teeth whitening with fantastic results.\n\n• In-chair (1 hour) — £299\n• Take-home kit — £199\n• Combined package — £349", time: '14:29' },
+    { isBot: false, text: 'The in-chair sounds great. Can I book a free consultation?', time: '14:31' },
+    { isBot: true, text: "Excellent choice! Consultations are completely free and take about 20 minutes. I've logged your details and someone will be in touch shortly to confirm your appointment.", time: '14:32' },
+  ]
   return (
     <div className="flex h-full" style={{ height: 'calc(100vh - 0px)' }}>
-      <div className="w-72 border-r border-white/10 flex flex-col bg-[#151515]">
-        <div className="p-4 border-b border-white/10">
-          <h2 className="text-sm font-semibold text-white mb-3">Conversations</h2>
+      <div className="w-72 border-r border-gray-100 flex flex-col bg-white">
+        <div className="p-4 border-b border-gray-100">
+          <h2 className="text-sm font-semibold text-gray-900 mb-3">Conversations</h2>
+          <div className="relative">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input placeholder="Search conversations..." className="w-full pl-9 pr-3 py-2 text-xs border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400" />
+          </div>
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center gap-1.5 px-6 text-center">
-          <p className="text-xs font-medium text-gray-400">No conversations yet</p>
-          <p className="text-xs text-gray-600 leading-relaxed">When new patient enquiries come in, they'll appear here.</p>
+        <div className="flex-1 overflow-y-auto">
+          {convList.map(c => (
+            <button
+              key={c.name}
+              onClick={() => onSelect({ name: c.name, topic: c.topic, av: c.av })}
+              className={`w-full text-left p-3.5 border-b border-gray-50 hover:bg-gray-50 ${selected.name === c.name ? 'bg-blue-50 border-l-2 border-l-blue-500' : ''}`}
+            >
+              <div className="flex items-start gap-2.5">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 ${c.avClass}`}>{c.av}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <span className="text-xs font-semibold text-gray-900">{c.name}</span>
+                    <span className="text-xs text-gray-400">{c.time}</span>
+                  </div>
+                  <div className="text-xs text-gray-500 truncate">{c.preview}</div>
+                  <div className="mt-1"><span className={`text-xs px-1.5 py-0.5 rounded-full ${c.tagClass}`}>{c.tag}</span></div>
+                </div>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center gap-1.5 bg-[#111111] text-center px-8">
-        <p className="text-xs font-medium text-gray-400">No conversation selected</p>
-        <p className="text-xs text-gray-600 leading-relaxed">Select a conversation to view messages here.</p>
-      </div>
-    </div>
-  )
-}
-
-// ─── Add Lead Modal ───────────────────────────────────────────────────────────
-
-function AddLeadModal({ clinicId, onClose, onSuccess }: {
-  clinicId: string
-  onClose: () => void
-  onSuccess: () => void
-}) {
-  const [name, setName] = useState('')
-  const [service, setService] = useState('')
-  const [phone, setPhone] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleSubmit = async () => {
-    if (!name.trim()) { setError('Name is required'); return }
-    setSubmitting(true)
-    setError('')
-    const { error: insertError } = await supabase.from('leads').insert({
-      name: name.trim(),
-      service: service.trim() || null,
-      phone: phone.trim() || null,
-      status: 'new',
-      clinic_id: clinicId,
-    })
-    setSubmitting(false)
-    if (insertError) { setError(insertError.message); return }
-    onSuccess()
-  }
-
-  return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
-        <h2 className="text-sm font-semibold text-gray-900 mb-4">Add lead</h2>
-        <div className="space-y-3">
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Name <span className="text-red-400">*</span></label>
-            <input value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg" placeholder="Patient name" />
+      <div className="flex-1 flex flex-col bg-gray-50">
+        <div className="bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-xs font-semibold">{selected.av}</div>
+            <div>
+              <div className="text-sm font-semibold text-gray-900">{selected.name}</div>
+              <div className="text-xs text-gray-400">{selected.topic} · Today</div>
+            </div>
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Service</label>
-            <input value={service} onChange={e => setService(e.target.value)} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg" placeholder="e.g. Teeth whitening" />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Phone</label>
-            <input value={phone} onChange={e => setPhone(e.target.value)} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg" placeholder="+44..." />
+          <div className="flex items-center gap-2">
+            <button className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">Add note</button>
+            <button className="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Mark resolved</button>
           </div>
         </div>
-        {error && <p className="text-xs text-red-500 mt-3">{error}</p>}
-        <div className="flex gap-2 mt-5">
-          <button onClick={onClose} className="flex-1 py-2 text-sm border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">Cancel</button>
-          <button onClick={handleSubmit} disabled={submitting} className="btn-primary-hover flex-1 py-2 text-sm bg-blue-600 text-white rounded-lg disabled:opacity-50">
-            {submitting ? 'Adding…' : 'Add lead'}
-          </button>
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+          {messages.map((m, i) => (
+            <div key={i} className={`flex items-end gap-2 message-bubble ${m.isBot ? '' : 'flex-row-reverse'}`}>
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${m.isBot ? 'bg-blue-600' : 'bg-blue-100'}`}>
+                {m.isBot
+                  ? <ToothIcon className="w-3 h-3 text-white" />
+                  : <span className="text-blue-700 text-xs font-semibold">{selected.av}</span>
+                }
+              </div>
+              <div className={`max-w-xs px-4 py-2.5 ${m.isBot ? 'bg-white border border-gray-100 rounded-2xl rounded-bl-sm shadow-sm' : 'bg-blue-600 rounded-2xl rounded-br-sm'}`}>
+                <p className={`text-sm whitespace-pre-line ${m.isBot ? 'text-gray-800' : 'text-white'}`}>{m.text}</p>
+                <p className={`text-xs mt-1 ${m.isBot ? 'text-gray-400' : 'text-blue-200'}`}>{m.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="bg-white border-t border-gray-100 p-4">
+          <div className="flex items-center gap-3">
+            <input placeholder="Add a note to this conversation..." className="flex-1 px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-gray-50 placeholder-gray-400" />
+            <button className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-700 transition-colors flex-shrink-0">
+              <SendIcon />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -631,24 +647,16 @@ function AddLeadModal({ clinicId, onClose, onSuccess }: {
 
 // ─── Owner: Leads ─────────────────────────────────────────────────────────────
 
-function OwnerLeads({ leads, clinicId, onLeadAdded }: { leads: any[], clinicId: string, onLeadAdded: () => void }) {
+function OwnerLeads({ leads }: { leads: any[] }) {
   const [filter, setFilter] = useState('all')
-  const [showModal, setShowModal] = useState(false)
   const badgeMap: Record<string, string> = { new: 'bg-emerald-50 text-emerald-700', booked: 'bg-blue-50 text-blue-700', pending: 'bg-amber-50 text-amber-700', urgent: 'bg-red-50 text-red-700' }
   const badgeLabel: Record<string, string> = { new: 'New', booked: 'Booked', pending: 'Pending', urgent: 'Urgent' }
   const filtered = filter === 'all' ? leads : leads.filter(l => l.status === filter)
   return (
     <div className="p-6 animate-fade-in">
-      {showModal && (
-        <AddLeadModal
-          clinicId={clinicId}
-          onClose={() => setShowModal(false)}
-          onSuccess={() => { setShowModal(false); onLeadAdded() }}
-        />
-      )}
       <div className="flex items-center justify-between mb-6">
         <div><h1 className="text-lg font-semibold text-gray-900">Leads</h1><p className="text-sm text-gray-500 mt-0.5">All chatbot-captured leads</p></div>
-        <button onClick={() => setShowModal(true)} className="btn-primary-hover px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg">Add lead</button>
+        <button className="btn-primary-hover px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg">Export CSV</button>
       </div>
       <div className="flex gap-2 mb-4">
         {['all','new','booked','pending','urgent'].map(f => (
@@ -762,49 +770,38 @@ function AgencyDashboard({ onLogout }: { onLogout: () => void }) {
 // ─── Agency: Overview ─────────────────────────────────────────────────────────
 
 function AgencyOverview({ onViewClients, onViewClient }: { onViewClients: () => void; onViewClient: (d: ClientDetail) => void }) {
-  const [owners, setOwners] = useState<any[]>([])
-  const [allLeads, setAllLeads] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const [{ data: profiles }, { data: leads }] = await Promise.all([
-        supabase.from('profiles').select('id, clinic_name, avatar_initials, email'),
-        supabase.from('leads').select('id, status, clinic_id'),
-      ])
-      const ownerProfiles = (profiles || []).filter(
-        p => p.role?.trim().toLowerCase() === 'owner'
-      )
-      setOwners(ownerProfiles)
-      setAllLeads(leads || [])
-      setLoading(false)
-    }
-    fetchData()
-  }, [])
-
-  const totalLeads = allLeads.length
-  const booked = allLeads.filter(l => l.status?.trim().toLowerCase() === 'booked').length
-  const conversion = totalLeads > 0 ? Math.round((booked / totalLeads) * 100) : 0
-
   const kpis = [
-    { label: 'Clients',       value: loading ? '—' : String(owners.length) },
-    { label: 'Conversations', value: '—' },
-    { label: 'Total leads',   value: loading ? '—' : String(totalLeads) },
-    { label: 'Appts booked',  value: loading ? '—' : String(booked) },
-    { label: 'Conversion',    value: loading ? '—' : `${conversion}%` },
+    { label: 'Clients', value: '4', delta: '+1 this month' },
+    { label: 'Conversations', value: '933', delta: '+16%' },
+    { label: 'Total leads', value: '206', delta: '+19%' },
+    { label: 'Appts booked', value: '130', delta: '+12%' },
+    { label: 'MRR', value: '£1,200', delta: '3 paying' },
   ]
-
+  const clients = [
+    { av: 'BS', avClass: 'bg-blue-100 text-blue-700', name: 'Bright Smile Dental', detail: '61 leads · 38 booked', status: 'Live', statusDot: 'bg-emerald-400', statusBadge: 'bg-emerald-50 text-emerald-700', leads: 61, appts: 38, email: 'owner@brightsmile.com' },
+    { av: 'OV', avClass: 'bg-emerald-100 text-emerald-700', name: 'Oakview Family', detail: '44 leads · 29 booked', status: 'Live', statusDot: 'bg-emerald-400', statusBadge: 'bg-emerald-50 text-emerald-700', leads: 44, appts: 29, email: 'owner@oakview.com' },
+    { av: 'MO', avClass: 'bg-purple-100 text-purple-700', name: 'Metro Orthodontics', detail: '28 leads · 18 booked', status: 'Trial', statusDot: 'bg-amber-400', statusBadge: 'bg-amber-50 text-amber-700', leads: 28, appts: 18, email: 'owner@metroortho.com' },
+    { av: 'WD', avClass: 'bg-orange-100 text-orange-700', name: 'Westside Dental', detail: '73 leads · 45 booked', status: 'Live', statusDot: 'bg-emerald-400', statusBadge: 'bg-emerald-50 text-emerald-700', leads: 73, appts: 45, email: 'owner@westsidedental.com' },
+  ]
+  const activity = [
+    { dot: 'bg-emerald-400', text: 'Metro Orthodontics signed up for trial', meta: 'Today 10:15 · System' },
+    { dot: 'bg-blue-400', text: 'Westside Dental hit 70 leads — new record', meta: 'Yesterday · Milestone' },
+    { dot: 'bg-amber-400', text: 'Oakview Family upgraded to Pro plan', meta: '28 Mar · Billing' },
+    { dot: 'bg-red-400', text: 'Bright Smile: 3 urgent enquiries flagged', meta: '27 Mar · Alert' },
+    { dot: 'bg-emerald-400', text: 'Monthly invoices sent to 3 paying clients', meta: '1 Mar · Billing' },
+  ]
   return (
     <div className="p-6 animate-fade-in">
       <div className="mb-6">
         <h1 className="text-lg font-semibold text-gray-900">Agency overview</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Agency dashboard</p>
+        <p className="text-sm text-gray-500 mt-0.5">March 2026 · 4 active clients</p>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         {kpis.map(k => (
           <div key={k.label} className="metric-card bg-white border border-gray-100 rounded-xl p-4">
             <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">{k.label}</div>
-            <div className={`text-2xl font-semibold ${k.value === '—' ? 'text-gray-400' : 'text-gray-900'}`}>{k.value}</div>
+            <div className="text-2xl font-semibold text-gray-900">{k.value}</div>
+            <div className="text-xs text-emerald-600 font-medium mt-1">{k.delta}</div>
           </div>
         ))}
       </div>
@@ -814,44 +811,35 @@ function AgencyOverview({ onViewClients, onViewClient }: { onViewClients: () => 
             <h3 className="text-sm font-semibold text-gray-900">Client performance</h3>
             <button onClick={onViewClients} className="text-xs text-blue-600 hover:text-blue-700 font-medium">View all</button>
           </div>
-          {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <p className="text-xs text-gray-400">Loading…</p>
-            </div>
-          ) : owners.length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-1.5 py-8 text-center">
-              <p className="text-xs font-medium text-gray-400">No clients yet</p>
-              <p className="text-xs text-gray-400">Clients you add will appear here.</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {owners.map(c => {
-                const clinicLeads = allLeads.filter(l => l.clinic_id === c.id)
-                const clinicBooked = clinicLeads.filter(l => l.status?.trim().toLowerCase() === 'booked').length
-                return (
-                  <div
-                    key={c.id}
-                    onClick={() => onViewClient({ name: c.clinic_name || c.email, email: c.email, leads: clinicLeads.length, appts: clinicBooked, clinicId: c.id })}
-                    className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-xs font-semibold flex-shrink-0">
-                      {c.avatar_initials || '??'}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-gray-900">{c.clinic_name || c.email}</div>
-                      <div className="text-xs text-gray-400">{clinicLeads.length} leads · {clinicBooked} booked</div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
+          <div className="space-y-3">
+            {clients.map(c => (
+              <div
+                key={c.name}
+                onClick={() => onViewClient({ name: c.name, email: c.email, leads: c.leads, appts: c.appts })}
+                className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 cursor-pointer"
+              >
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 ${c.avClass}`}>{c.av}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-gray-900">{c.name}</div>
+                  <div className="text-xs text-gray-400">{c.detail}</div>
+                </div>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.statusBadge}`}>{c.status}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="bg-white border border-gray-100 rounded-xl p-5">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Activity feed</h3>
-          <div className="flex flex-col items-center justify-center gap-1.5 py-8 text-center">
-            <p className="text-xs font-medium text-gray-400">No recent activity</p>
-            <p className="text-xs text-gray-400">Events will appear here as they happen.</p>
+          <div className="space-y-3">
+            {activity.map((a, i) => (
+              <div key={i} className="flex gap-3">
+                <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5 ${a.dot}`} />
+                <div>
+                  <div className="text-xs text-gray-800">{a.text}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{a.meta}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -910,7 +898,7 @@ function AgencyClients({ onViewClient }: { onViewClient: (d: ClientDetail) => vo
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex gap-1.5">
-                    <button onClick={() => onViewClient({ name: c.name, email: c.email, leads: c.leads, appts: c.appts, clinicId: '' })} className="text-xs px-2.5 py-1 border border-blue-200 text-blue-600 rounded-lg hover:bg-blue-50">View</button>
+                    <button onClick={() => onViewClient({ name: c.name, email: c.email, leads: c.leads, appts: c.appts })} className="text-xs px-2.5 py-1 border border-blue-200 text-blue-600 rounded-lg hover:bg-blue-50">View</button>
                     <button className="text-xs px-2.5 py-1 border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50">Edit</button>
                   </div>
                 </td>
@@ -926,93 +914,46 @@ function AgencyClients({ onViewClient }: { onViewClient: (d: ClientDetail) => vo
 // ─── Agency: Client Detail ────────────────────────────────────────────────────
 
 function AgencyClientDetail({ detail, onBack }: { detail: ClientDetail; onBack: () => void }) {
-  const [leads, setLeads] = useState<any[]>([])
-  const [loading, setLoading] = useState(!!detail.clinicId)
-  const [showModal, setShowModal] = useState(false)
-
-  useEffect(() => {
-    if (!detail.clinicId) { setLoading(false); return }
-    supabase
-      .from('leads')
-      .select('id, name, service, status, created_at')
-      .eq('clinic_id', detail.clinicId)
-      .order('created_at', { ascending: false })
-      .then(({ data }) => { setLeads(data || []); setLoading(false) })
-  }, [detail.clinicId])
-
-  const booked = leads.filter(l => l.status?.trim().toLowerCase() === 'booked').length
-
-  const badgeMap: Record<string, string> = {
-    new: 'bg-emerald-50 text-emerald-700',
-    booked: 'bg-blue-50 text-blue-700',
-    pending: 'bg-amber-50 text-amber-700',
-    urgent: 'bg-red-50 text-red-700',
-  }
-
-  const fetchLeads = async () => {
-    if (!detail.clinicId) return
-    const { data } = await supabase
-      .from('leads')
-      .select('id, name, service, status, created_at')
-      .eq('clinic_id', detail.clinicId)
-      .order('created_at', { ascending: false })
-    setLeads(data || [])
-  }
-
+  const convos = [
+    { av: 'SM', avClass: 'bg-blue-100 text-blue-700', name: 'Sarah Mitchell', preview: "Hi, I'd like to know about teeth whitening...", time: '14:32' },
+    { av: 'TG', avClass: 'bg-emerald-100 text-emerald-700', name: 'Tom Griffiths', preview: "Need to book a checkup, it's been 18 months...", time: '11:15' },
+    { av: 'PN', avClass: 'bg-red-100 text-red-700', name: 'Priya Nair', preview: 'I think I have a cracked filling, can you see me urgently?', time: 'Yesterday' },
+  ]
   return (
     <div className="p-6 animate-fade-in">
-      {showModal && (
-        <AddLeadModal
-          clinicId={detail.clinicId}
-          onClose={() => setShowModal(false)}
-          onSuccess={() => { setShowModal(false); fetchLeads() }}
-        />
-      )}
       <div className="flex items-center gap-3 mb-6">
         <button onClick={onBack} className="text-gray-400 hover:text-gray-600"><BackIcon /></button>
         <div>
           <h1 className="text-lg font-semibold text-gray-900">{detail.name}</h1>
           <p className="text-xs text-gray-500">{detail.email}</p>
         </div>
-        {detail.clinicId && (
-          <button onClick={() => setShowModal(true)} className="ml-auto btn-primary-hover px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg">Add lead</button>
-        )}
+        <div className="ml-auto flex gap-2">
+          <button className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">Send invoice</button>
+          <button className="btn-primary-hover text-xs px-3 py-1.5 bg-blue-600 text-white rounded-lg">Login as client</button>
+        </div>
       </div>
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        {[['Leads', leads.length], ['Booked', booked], ['Conversations', '—']].map(([k, v]) => (
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        {[['Leads', detail.leads],['Booked', detail.appts],['Conversations','284'],['Rating','4.7 ★']].map(([k,v]) => (
           <div key={k} className="bg-white border border-gray-100 rounded-xl p-4">
             <div className="text-xs text-gray-500 mb-1">{k}</div>
-            <div className={`text-xl font-semibold ${v === '—' ? 'text-gray-400' : 'text-gray-900'}`}>{v}</div>
+            <div className="text-xl font-semibold text-gray-900">{v}</div>
           </div>
         ))}
       </div>
       <div className="bg-white border border-gray-100 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-gray-900 mb-4">Leads</h3>
-        {loading ? (
-          <p className="text-xs text-gray-400 py-4 text-center">Loading…</p>
-        ) : leads.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-1.5 py-8 text-center">
-            <p className="text-xs font-medium text-gray-400">No leads yet</p>
-            <p className="text-xs text-gray-400">Leads captured for this clinic will appear here.</p>
-          </div>
-        ) : (
-          <div className="divide-y divide-gray-50">
-            {leads.map(l => (
-              <div key={l.id} className="flex items-center gap-3 py-2.5">
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-gray-900">{l.name}</div>
-                  <div className="text-xs text-gray-400">{l.service || 'General enquiry'}</div>
-                </div>
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badgeMap[l.status?.trim().toLowerCase()] ?? 'bg-gray-100 text-gray-600'}`}>
-                  {l.status || 'new'}
-                </span>
-                <span className="text-xs text-gray-400 flex-shrink-0">
-                  {l.created_at ? new Date(l.created_at).toLocaleDateString() : ''}
-                </span>
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Recent conversations</h3>
+        <div className="space-y-3">
+          {convos.map(c => (
+            <div key={c.name} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 ${c.avClass}`}>{c.av}</div>
+              <div className="flex-1">
+                <div className="text-xs font-medium text-gray-900">{c.name}</div>
+                <div className="text-xs text-gray-400">{c.preview}</div>
               </div>
-            ))}
-          </div>
-        )}
+              <span className="text-xs text-gray-400">{c.time}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -1020,54 +961,98 @@ function AgencyClientDetail({ detail, onBack }: { detail: ClientDetail; onBack: 
 
 // ─── Chatbot Integration ──────────────────────────────────────────────────────
 
-function ChatbotIntegration({ clinicId }: { clinicId: string }) {
-  const snippet = `fetch("https://your-domain.com/api/leads", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    clinic_id: "${clinicId}",
-    name: "Patient name",
-    service: "Service requested",
-    phone: "Patient phone"
-  })
-})`
+function ChatbotIntegration({ account }: { account: Account }) {
+  const clinicId  = account.id ?? ''
+  const [copied, setCopied] = useState<string | null>(null)
+
+  const copy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(key)
+      setTimeout(() => setCopied(null), 2000)
+    })
+  }
+
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com').replace(/\/$/, '')
+
+  const snippetHosted = `<script\n  src="${appUrl}/widget.js"\n  data-clinic-id="${clinicId}"\n  data-api-url="${appUrl}"\n  data-clinic-name="${account.clinic ?? ''}"\n  data-color="#2563eb">\n<\/script>`
+
+  const snippetApi = `// Direct API — for custom chatbots or server-to-server\nawait fetch('${appUrl}/api/chat', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({\n    clinic_id:   '${clinicId}',\n    clinic_name: '${account.clinic ?? ''}',\n    messages: [\n      { role: 'user', content: 'I\\'d like to book a check-up' }\n    ],\n  }),\n})\n// Returns: { message: string, leadSaved: boolean, leadId: string | null }`
+
+  const CopyBtn = ({ text, id }: { text: string; id: string }) => (
+    <button
+      onClick={() => copy(text, id)}
+      className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded text-xs font-medium transition-colors"
+      style={{ background: copied === id ? '#166534' : 'rgba(255,255,255,0.08)', color: copied === id ? '#86efac' : '#9ca3af' }}
+    >
+      {copied === id ? 'Copied!' : 'Copy'}
+    </button>
+  )
 
   return (
-    <div className="p-8 animate-fade-in max-w-2xl">
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-white tracking-tight">Chatbot integration</h1>
-        <p className="text-xs text-gray-600 mt-1">Connect an external chatbot widget to capture leads automatically</p>
+    <div className="p-6 max-w-2xl animate-fade-in">
+      <h1 className="text-lg font-semibold text-white mb-1">Chatbot &amp; Widget</h1>
+      <p className="text-sm text-white/50 mb-8">Embed a lead-capture widget on your clinic website — no build step required.</p>
+
+      {/* Clinic ID badge */}
+      <div className="mb-8 p-4 rounded-xl border border-white/[0.08] bg-white/[0.03]">
+        <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">Your Clinic ID</p>
+        <div className="flex items-center gap-3">
+          <code className="text-sm text-blue-400 font-mono flex-1 truncate">{clinicId || '—'}</code>
+          {clinicId && (
+            <button
+              onClick={() => copy(clinicId, 'id')}
+              className="shrink-0 px-3 py-1 rounded-lg text-xs font-medium transition-colors"
+              style={{ background: copied === 'id' ? 'rgba(22,101,52,0.4)' : 'rgba(255,255,255,0.06)', color: copied === 'id' ? '#86efac' : '#9ca3af' }}
+            >
+              {copied === 'id' ? 'Copied!' : 'Copy'}
+            </button>
+          )}
+        </div>
       </div>
-      <div className="space-y-4">
-        <div className="bg-[#1a1a1a] border border-white/[0.08] rounded-2xl p-5">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">How it works</h3>
-          <ul className="space-y-2 text-xs text-gray-400">
-            <li>1. Your chatbot collects the patient&apos;s name, service interest, and phone number.</li>
-            <li>2. It sends a POST request to <code className="text-blue-400">/api/leads</code> with that data.</li>
-            <li>3. The lead appears instantly in your Leads dashboard and Overview metrics.</li>
-          </ul>
+
+      {/* Step 1 */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2.5 mb-3">
+          <span className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white shrink-0">1</span>
+          <h2 className="text-sm font-semibold text-white">Paste the embed snippet</h2>
         </div>
-        <div className="bg-[#1a1a1a] border border-white/[0.08] rounded-2xl p-5">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Required fields</h3>
-          <div className="space-y-2">
-            {[
-              ['clinic_id', clinicId, 'Your unique clinic identifier — already filled in below'],
-              ['name', 'string', 'Patient full name'],
-              ['service', 'string', 'Service they enquired about (optional)'],
-              ['phone', 'string', 'Contact number (optional)'],
-            ].map(([field, type, desc]) => (
-              <div key={field} className="flex items-start gap-3 text-xs">
-                <code className="text-blue-400 w-24 flex-shrink-0">{field}</code>
-                <span className="text-gray-600 w-40 flex-shrink-0 truncate">{type}</span>
-                <span className="text-gray-500">{desc}</span>
-              </div>
-            ))}
+        <p className="text-xs text-white/50 mb-3 pl-8">Add this before the <code className="text-blue-400">&lt;/body&gt;</code> tag on your clinic website. Change only the <code className="text-blue-400">data-*</code> attributes.</p>
+        <div className="relative">
+          <pre className="text-xs text-green-300 bg-[#0d1117] border border-white/10 rounded-xl p-4 overflow-x-auto leading-relaxed">{snippetHosted}</pre>
+          <CopyBtn text={snippetHosted} id="hosted" />
+        </div>
+      </div>
+
+      {/* Step 2 */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2.5 mb-3">
+          <span className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white shrink-0">2</span>
+          <h2 className="text-sm font-semibold text-white">Or use the Chat API directly</h2>
+        </div>
+        <p className="text-xs text-white/50 mb-3">For custom integrations — send a conversation and get an AI reply. Leads are saved automatically server-side.</p>
+        <div className="relative">
+          <pre className="text-xs text-blue-300 bg-[#0d1117] border border-white/10 rounded-xl p-4 overflow-x-auto leading-relaxed">{snippetApi}</pre>
+          <CopyBtn text={snippetApi} id="api" />
+        </div>
+      </div>
+
+      {/* Attributes table */}
+      <div className="rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="px-4 py-3 border-b border-white/[0.06]">
+          <p className="text-xs font-semibold text-white/40 uppercase tracking-wider">Widget attributes</p>
+        </div>
+        {[
+          { attr: 'data-clinic-id',   req: true,  desc: 'Your clinic UUID (shown above)' },
+          { attr: 'data-api-url',     req: true,  desc: 'Base URL of your deployed app — no trailing slash' },
+          { attr: 'data-clinic-name', req: false, desc: 'Used in the AI greeting and chat header' },
+          { attr: 'data-color',       req: false, desc: 'Primary hex colour (default #2563eb)' },
+        ].map((row, i) => (
+          <div key={i} className="flex items-start gap-4 px-4 py-3 border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02]">
+            <code className="text-xs text-blue-400 font-mono w-44 shrink-0 pt-0.5">{row.attr}</code>
+            <span className={`text-xs font-medium shrink-0 mt-0.5 ${row.req ? 'text-rose-400' : 'text-white/30'}`}>{row.req ? 'required' : 'optional'}</span>
+            <span className="text-xs text-white/50">{row.desc}</span>
           </div>
-        </div>
-        <div className="bg-[#1a1a1a] border border-white/[0.08] rounded-2xl p-5">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Example widget code</h3>
-          <pre className="text-xs text-gray-300 leading-relaxed overflow-x-auto whitespace-pre">{snippet}</pre>
-        </div>
+        ))}
       </div>
     </div>
   )
@@ -1118,7 +1103,7 @@ const loadDashboardData = async (userId: string, userEmail?: string) => {
   setLoggedInAccount({
     id: userId,
     pass: '',
-    role: profile.role?.trim().toLowerCase() ?? '',
+    role: profile.role,
     clinic: profile.clinic_name || '',
     doctor: profile.doctor_name || '',
     av: profile.avatar_initials || '',
@@ -1151,47 +1136,34 @@ const loadDashboardData = async (userId: string, userEmail?: string) => {
   await loadDashboardData(user.id, user.email || email)
   }
 
-  const refreshLeads = async (clinicId: string) => {
-    const { data } = await supabase
-      .from('leads')
-      .select('*')
-      .eq('clinic_id', clinicId)
-      .order('created_at', { ascending: false })
-    const fresh = data || []
-    setLeads(fresh)
-    setMetrics(getMetricsFromLeads(fresh))
-  }
-
   const handleLogout = () => {
     setLoggedInEmail('')
     setLoggedInAccount(null)
     setPage('login')
   }
 
-  const normalizedRole = loggedInAccount?.role?.trim().toLowerCase()
-
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
       <div className="h-full bg-gray-50 text-gray-900 antialiased">
-        {!loggedInAccount && page === 'signup' && (
-          <SignupPage onGoLogin={() => setPage('login')} />
-        )}
-        {!loggedInAccount && page !== 'signup' && (
+        {page === 'login' && (
           <LoginPage onLogin={handleLogin} onGoSignup={() => setPage('signup')} />
         )}
-        {loggedInAccount && normalizedRole === 'agency' && (
-          <AgencyDashboard onLogout={handleLogout} />
-        )}
-        {loggedInAccount && normalizedRole !== 'agency' && (
+        {page === 'signup' && (
+  <SignupPage onGoLogin={() => setPage('login')} />
+)}
+        {page === 'owner-dash' && loggedInAccount && (
           <OwnerDashboard
-            account={loggedInAccount}
-            email={loggedInEmail}
-            leads={leads}
-            metrics={metrics}
-            onLogout={handleLogout}
-            onRefreshLeads={refreshLeads}
-          />
+  account={loggedInAccount}
+  email={loggedInEmail}
+  leads={leads}
+  metrics={metrics}
+  onLogout={handleLogout}
+/>
+)}
+
+        {page === 'agency-dash' && (
+          <AgencyDashboard onLogout={handleLogout} />
         )}
       </div>
     </>
