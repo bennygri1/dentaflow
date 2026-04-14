@@ -235,6 +235,7 @@ function LoginPage({
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && doLogin()}
                 className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-400"
+                style={{ color: '#111827', WebkitTextFillColor: '#111827' }}
               />
             </div>
             <div>
@@ -248,6 +249,7 @@ function LoginPage({
                 onChange={e => setPassword(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && doLogin()}
                 className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-400"
+                style={{ color: '#111827', WebkitTextFillColor: '#111827' }}
               />
             </div>
             {error && <p className="text-xs text-red-500">{error}</p>}
